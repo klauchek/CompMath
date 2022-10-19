@@ -2,12 +2,17 @@
 
 namespace matrix {
 
-void matrix_t::fill() {
+void matrix_t::fill(const std::vector<double>& points, double x0) {
     double elem = 0.0;
     for(int i = 0; i < rows_; ++i) { 
         for(int j = 0; j < cols_; ++j) {
-            std::cin >> elem;
-            arr_[i * cols_ + j] = elem;
+            if(j == cols_ - 1 && i < 2) {
+                arr_[i * cols_ + j] = i;
+            }
+            else if(j == cols_ - 1 && i > 1)
+                arr_[i * cols_ + j] = x0 * std::tgamma(i + 1);
+            else
+                arr_[i * cols_ + j] = std::pow(points[j], i);
         }
     }
 }

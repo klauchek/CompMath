@@ -7,7 +7,7 @@
 
 namespace matrix {
 
-const double EPSILON = 1e-11;
+const double EPSILON = 1e-9;
 
 struct elem {
     double value;
@@ -26,7 +26,7 @@ public:
 
     void swap_rows(size_t row_1, size_t row_2);
     void swap_columns(size_t col_1, size_t col_2);
-    void fill();
+    void fill(const std::vector<double>& points, double x0);
     void print();
     double get_elem(size_t pos);
     elem max_elem(size_t col, size_t row);
