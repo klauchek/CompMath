@@ -50,7 +50,6 @@ void matrix_t::swap_columns(size_t col_1, size_t col_2) {
         std::swap(arr_[row * cols_ + col_1], arr_[row * cols_ + col_2]);
 }
 
-
 void matrix_t::eliminate(size_t row) {
     double coef = 0.0;
     for(size_t i = row + 1; i < rows_; ++i) {
@@ -63,7 +62,6 @@ void matrix_t::eliminate(size_t row) {
 
 void matrix_t::gauss() {
     elem pivot{};
-    print();
     for(size_t i = 0, j = 0; i < rows_, j < cols_ - 1; ++i, ++j) {
         pivot = max_elem(j, i);
         if(dbl_cmp(pivot.value, 0.0) && i == 0)
