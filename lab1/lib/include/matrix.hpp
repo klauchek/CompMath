@@ -3,11 +3,12 @@
 
 #include <iostream>
 #include <cmath>
+#include <cstdlib>
 #include <vector>
 
 namespace matrix {
 
-const double EPSILON = 1e-9;
+const double EPSILON = 1e-12;
 
 struct elem {
     double value;
