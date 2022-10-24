@@ -1,4 +1,4 @@
-#include "../include/matrix.hpp"
+#include "matrix.hpp"
 
 namespace matrix {
 
@@ -8,7 +8,7 @@ void matrix_t::fill(const std::vector<double>& x, const std::vector<double>& y) 
         arr_[i * cols_] = y[i];
     for(int j = 1; j < cols_; ++j) {
         for(int i = j; i < rows_; ++i) {
-            std::cout << "i: " << i << "j: " << j << std::endl; 
+            //std::cout << "i: " << i << "j: " << j << std::endl; 
             arr_[i * cols_ + j] = (arr_[(j - 1) * cols_ + (j - 1)] - arr_[i * cols_ + (j - 1)]) / (x[j - 1] - x[i]);
         }
     }
