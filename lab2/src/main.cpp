@@ -23,12 +23,9 @@ int main() {
 
     for(int i = 0; i < segments.size(); ++i) {
         double step = std::abs(segments[i].second - segments[i].first) / 2;
-        //std::cout << "step " << step << std::endl; 
         for(int j = 0; j < 3; ++j) {
             x_3pts[i].push_back(segments[i].first + j * step);
-            //std::cout << "x " << x_3pts[i][j] << std::endl;
             y_3pts[i].push_back(func(x_3pts[i][j]));
-            //std::cout << "y " << y_3pts[i][j] << std::endl;
         }
     }
 
@@ -40,13 +37,10 @@ int main() {
         double point = x_3pts[i][0];
         for(int j = 0; j < 1000; ++j) {
             point =+ step * j;
-            //std::cout << "point " << point << std::endl;
-            //std::cout << "cos " << func(point) << std::endl;
-            //std::cout << "interp " << newt_int_3pts.interpolate(point) << std::endl;
             temp_err.push_back(std::abs(func(point) - newt_int_3pts.interpolate(point)));
         }
         auto err = std::max_element(temp_err.begin(), temp_err.end());
-        std::cout << "err: " << *err << ", seg len: " << segments[i].second << std::endl;
+        std::cout << *err << std::endl;
     }
     //------ интерполяция по 5 точкам на всех приведенных выше отрезках интерполяции ----------//
     //---------------- точки на каждом отрезке будем распрелять равномерно --------------------//
@@ -58,12 +52,9 @@ int main() {
 
     for(int i = 0; i < segments.size(); ++i) {
         double step = std::abs(segments[i].second - segments[i].first) / 4;
-        //std::cout << "step " << step << std::endl; 
         for(int j = 0; j < 5; ++j) {
             x_5pts[i].push_back(segments[i].first + j * step);
-            //std::cout << "x " << x_5pts[i][j] << std::endl;
             y_5pts[i].push_back(func(x_5pts[i][j]));
-            //std::cout << "y " << y_5pts[i][j] << std::endl;
         }
     }
 
@@ -75,13 +66,10 @@ int main() {
         double point = x_5pts[i][0];
         for(int j = 0; j < 1000; ++j) {
             point =+ step * j;
-            //std::cout << "point " << point << std::endl;
-            //std::cout << "cos " << func(point) << std::endl;
-            //std::cout << "interp " << newt_int_3pts.interpolate(point) << std::endl;
             temp_err.push_back(std::abs(func(point) - newt_int_5pts.interpolate(point)));
         }
         auto err = std::max_element(temp_err.begin(), temp_err.end());
-        std::cout << "err: " << *err << ", seg len: " << segments[i].second << std::endl;
+        std::cout << *err << std::endl;
     }
 
     //------ интерполяция по 10 точкам на всех приведенных выше отрезках интерполяции ----------//
@@ -93,12 +81,9 @@ int main() {
 
     for(int i = 0; i < segments.size(); ++i) {
         double step = std::abs(segments[i].second - segments[i].first) / 9;
-        //std::cout << "step " << step << std::endl; 
         for(int j = 0; j < 10; ++j) {
             x_10pts[i].push_back(segments[i].first + j * step);
-            //std::cout << "x " << x_10pts[i][j] << std::endl;
             y_10pts[i].push_back(func(x_10pts[i][j]));
-            //std::cout << "y " << y_10pts[i][j] << std::endl;
         }
     }
 
@@ -110,13 +95,43 @@ int main() {
         double point = x_10pts[i][0];
         for(int j = 0; j < 1000; ++j) {
             point =+ step * j;
-            //std::cout << "point " << point << std::endl;
-            //std::cout << "cos " << func(point) << std::endl;
-            //std::cout << "interp " << newt_int_3pts.interpolate(point) << std::endl;
             temp_err.push_back(std::abs(func(point) - newt_int_10pts.interpolate(point)));
         }
         auto err = std::max_element(temp_err.begin(), temp_err.end());
-        std::cout << "err: " << *err << ", seg len: " << segments[i].second << std::endl;
+        std::cout << *err << std::endl;
+    }
+
+    //------ интерполяция по 5 точкам на всех приведенных выше отрезках интерполяции ----------//
+    //---------------------------------- Чебышёв-----------------------------------------------//
+    std::cout << "========================================" << std::endl;
+
+    std::array<std::vector<double>, 7> x_cheb_pts;
+    std::array<std::vector<double>, 7> y_cheb_pts;
+
+    for(int i = 0; i < segments.size(); ++i) {
+        double a = segments[i].first;
+        double b = segments[i].second;
+        for(int j = 0; j < 5; ++j) {
+            double x_cheb = ((b + a) + (b - a) * cos((M_PI * (2 * j + 1)) / 10)) / 2; //((b + a) + (b - a) * cos((M_PI * (2 * j + 1)) / 2 * n)) / 2; 
+            x_cheb_pts[i].push_back(x_cheb);
+            y_cheb_pts[i].push_back(func(x_cheb_pts[i][j]));
+        }
+    }
+
+    //error calculation
+    for(int i = 0; i < segments.size(); ++i) {
+        interpolate::NewtonianInterpolator newt_int_cheb(x_cheb_pts[i], y_cheb_pts[i]); //интерполянт на данном отрезке
+        std::vector<double> temp_err;
+        double step = std::abs(segments[i].second - segments[i].first) / 999;
+        double point = segments[i].first;
+        for(int j = 0; j < 1000; ++j) {
+            point =+ step * j;
+            temp_err.push_back(std::abs(func(point) - newt_int_cheb.interpolate(point)));
+        }
+
+        
+        auto err = std::max_element(temp_err.begin(), temp_err.end());
+        std::cout << *err << std::endl;
     }
 
 }

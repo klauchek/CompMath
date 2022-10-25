@@ -19,7 +19,6 @@ public:
 
     /*** Метод, выполняющий подсчет интерполяционного полинома в точке ***/
     [[nodiscard]] double interpolate(double x) const;
-     //схема горнера
 };
 
 double calc_poly(const std::vector<double> &coefs, double x);
