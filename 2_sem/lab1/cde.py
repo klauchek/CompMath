@@ -26,19 +26,6 @@ def angle(grid, u):
         u[i + 1][0] = u[i + 1][grid.Nx - 1]
 
 
-
-
-def lax(grid):
-    u = np.zeros([grid.N, grid.M])
-    u[0] = [u0(grid, x) for x in grid.xr]
-    for i in range(grid.N-1):
-        u[i+1][0] = f(grid, u[i][grid.M-2], u[i][0], u[i][1])
-        for j in range(1, grid.M-1):
-            u[i+1][j] = f(grid, u[i][j-1], u[i][j], u[i][j+1])
-        u[i+1][grid.M-1] = f(grid, u[i][grid.M-2], u[i][grid.M-1], u[i][1])
-    return u
-
-
 def LaxWendroff(grid, u):
     for i in range(grid.Nt - 1):
         for j in range(1, grid.Nx - 1):
