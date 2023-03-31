@@ -36,7 +36,7 @@ def plot_params(time, tt, tr, xx, w, gamma, tau, h):
     pax.set_xlim(-10, 10)
     pax.grid()
 
-    fig.suptitle(f't={time}с, h={round(h, 2)}м, 'r'$\tau$'f'={tau}с')
+    fig.suptitle(f't={time}с, h={round(h, 2)}, 'r'$\tau$'f'={tau}с')
     fig.set_figheight(10)
     fig.set_figwidth(16)
     plt.subplots_adjust(wspace=0.2)
@@ -95,6 +95,7 @@ def main ():
 
     solution(tt, xx, gamma, w, tau, h, f)
     plot_params(0.015, tt, t_r, xx, w, gamma, tau, h)
+
     
 
 
