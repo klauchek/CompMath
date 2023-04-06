@@ -23,29 +23,31 @@ def angle(grid, u):
     for i in range(grid.Nt - 1):
         for j in range(1, grid.Nx):
             u[i + 1][j] = u[i][j] - (grid.tau / grid.h) * u[i][j] * (u[i][j] - u[i][j - 1])
-        u[i + 1][0] = u[i + 1][grid.Nx - 1]
+        u[i + 1][0] = 1
+        u[i + 1][grid.Nx - 1] = 0
 
 def LaxWendroff(grid, u):
     for i in range(grid.Nt - 1):
         for j in range(1, grid.Nx - 1):
             u[i + 1][j] = u[i][j] + u[i][j] * 0.5 * (grid.tau / grid.h) * (u[i][j - 1] - u[i][j + 1]) + (u[i][j])**2 * 0.5 * (grid.tau / grid.h)**2 * (u[i][j + 1] - 2 * u[i][j] + u[i][j - 1])
-        u[i + 1][0] = u[i][0] + u[i][0] * 0.5 * (grid.tau / grid.h) * (u[i][grid.Nx - 2] - u[i][1]) + (u[i][0])**2 * 0.5 * (grid.tau / grid.h)**2 * (u[i][1] - 2 * u[i][0] + u[i][grid.Nx - 2])
-        u[i + 1][grid.Nx - 1] = u[i][grid.Nx - 1] + u[i][grid.Nx - 1] * 0.5 * (grid.tau / grid.h) * (u[i][grid.Nx - 2] - u[i][0]) + (u[i][grid.Nx - 1])**2 * 0.5 * (grid.tau / grid.h)**2 * (u[i][0] - 2 * u[i][grid.Nx - 1] + u[i][grid.Nx - 2])
+
+        u[i + 1][0] = 1 #u[i][0] + u[i][0] * 0.5 * (grid.tau / grid.h) * (u[i][grid.Nx - 2] - u[i][1]) + (u[i][0])**2 * 0.5 * (grid.tau / grid.h)**2 * (u[i][1] - 2 * u[i][0] + u[i][grid.Nx - 2])
+        u[i + 1][grid.Nx - 1] = 0 #u[i][grid.Nx - 1] + u[i][grid.Nx - 1] * 0.5 * (grid.tau / grid.h) * (u[i][grid.Nx - 2] - u[i][0]) + (u[i][grid.Nx - 1])**2 * 0.5 * (grid.tau / grid.h)**2 * (u[i][0] - 2 * u[i][grid.Nx - 1] + u[i][grid.Nx - 2])
     
 def solution(grid, scheme):
     # def I(x, grid):
     #     return math.sin(4 * math.pi * x / grid.L)
 
     def func(x):
-        if x >= 1 and x < 1.5: return -x + 2
-        if x >= 1.5: return 0.5
-        else: return 1
+        if x < 13: return 1
+        if x >= 13 and x < 14: return -x + 14
+        else : return 0
 
     def I(x, grid):
         return func(x)
 
     u = np.zeros([grid.Nt, grid.Nx])
-    u[0] = [I(x, grid) for x in grid.x]                
+    u[0] = [I(x, grid) for x in grid.x]      
 
     scheme(grid, u)
     return u, grid.x, grid.t
